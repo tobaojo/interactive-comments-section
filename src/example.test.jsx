@@ -5,6 +5,6 @@ describe("App", () => {
   it("renders", () => {
     render(<App />);
 
-    expect(screen.queryByText("Vite + React")).toBeVisible();
+    expect(screen.queryByText("hello world")).toBeVisible();
   });
 });
