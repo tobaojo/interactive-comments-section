@@ -41,7 +41,11 @@ export function useCurrentUser(): [
 
 export function useComments(): [
   Comment[] | null,
-  { isLoading: boolean; error: string | null },
+  {
+    isLoading: boolean;
+    error: string | null;
+    addComment: (newComment: Comment) => void;
+  },
 ] {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,5 +76,9 @@ export function useComments(): [
     }
     getComments();
   }, []);
-  return [comments, { isLoading, error }];
+
+  function addComment(newComment: Comment) {
+    setComments((prevComments) => [...(prevComments ?? []), newComment]);
+  }
+  return [comments, { isLoading, error, addComment }];
 }

@@ -8,10 +8,10 @@ function App() {
     currentUser,
     { isLoading: isCurrentUserLoading, error: CurrentUserError },
   ] = useCurrentUser();
-  const [comments, { isLoading, error }] = useComments();
+  const [comments, { isLoading, error, addComment }] = useComments();
 
   return (
-    <div className="container relative flex flex-col self-center h-screen text-grayishBlue p-4 m-4 ">
+    <div className="container relative flex flex-col self-center text-grayishBlue p-4 m-4 ">
       {error && <p>Error: {error}</p>}
       {isLoading && <p>loading...</p>}
       {comments &&
@@ -20,7 +20,12 @@ function App() {
         ))}
       {CurrentUserError && <p>Error: {error}</p>}
       {isCurrentUserLoading && <p>loading...</p>}
-      {currentUser && <CurrentUserCommentBox currentUser={currentUser} />}
+      {currentUser && (
+        <CurrentUserCommentBox
+          currentUser={currentUser}
+          addComment={addComment}
+        />
+      )}
     </div>
   );
 }

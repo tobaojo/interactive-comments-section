@@ -8,12 +8,12 @@ type CardProps = {
 
 const Card = ({ comment }: CardProps) => {
   return (
-    <div className="bg-white w-full self-center h-auto p-4 m-4 md:w-8/12">
+    <div className="bg-white w-full self-center h-auto p-4 m-4 md:w-8/12 flex-grow overflow-y-auto">
       <div className="flex space-x-4 items-center p-2">
         <img
           src={comment?.user?.image.png}
           alt={`user - ${comment?.user?.username}`}
-          className="w-[10%]"
+          className="w-[10%] md:w-[7%]"
         />
         <h1 className="text-darkBlue font-semibold">{comment.user.username}</h1>
         <span>{comment.createdAt}</span>
