@@ -3,9 +3,12 @@ import { getFromLocalStorage } from "../utils/utils";
 import { fetchComments, fetchCurrentUser } from "../api/api";
 import { type User, type Comment } from "../types/types";
 
-export function useCurrentUser() {
+export function useCurrentUser(): [
+  User | null,
+  { isLoading: boolean; error: string | null },
+] {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | Error | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -21,7 +24,11 @@ export function useCurrentUser() {
         }
       } catch (error: unknown) {
         if (error instanceof Error) {
+          setError(error.message);
+        } else if (typeof error === "string") {
           setError(error);
+        } else {
+          setError("An unknown error occurred.");
         }
       } finally {
         setIsLoading(false);
