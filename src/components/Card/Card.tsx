@@ -1,26 +1,26 @@
+import { Comment } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 
-const Card = () => {
+type CardProps = {
+  comment: Comment;
+};
+
+const Card = ({ comment }: CardProps) => {
   return (
     <div className="bg-white w-full self-center h-auto p-4 m-4 md:w-8/12">
       <div className="flex space-x-4 items-center p-2">
         <img
-          src="../../../images/avatars/image-amyrobson.png"
-          alt="User - Amy Robson"
+          src={comment?.user?.image.png}
+          alt={`user - ${comment?.user?.username}`}
           className="w-[10%]"
         />
-        <h1 className="text-darkBlue font-semibold">Amy Robson</h1>
-        <span>1 month ago</span>
+        <h1 className="text-darkBlue font-semibold">{comment.user.username}</h1>
+        <span>{comment.createdAt}</span>
       </div>
-      <p className="m-4">
-        Impressive! Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-        Amet magnam eaque beatae, necessitatibus a vitae optio repellendus sunt,
-        voluptatem quam saepe voluptate architecto quo rem totam ea illum
-        sapiente excepturi.
-      </p>
+      <p className="m-4">{comment.content}</p>
       <div className="flex items-center justify-between">
-        <LikeCounter />
+        <LikeCounter score={comment.score} />
         <ReplyButton onHandleClick={() => console.log("Reply")} />
       </div>
     </div>
