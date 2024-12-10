@@ -1,6 +1,6 @@
 import { type User, type Comment } from "../types/types";
 
-export function saveToLocalStorage(key: string, data: User | Comment) {
+export function saveToLocalStorage(key: string, data: User | Comment[]) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 

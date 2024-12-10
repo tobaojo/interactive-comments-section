@@ -22,6 +22,7 @@ const CurrentUserCommentBox = ({
       score: 0,
       user: currentUser,
     };
+    setResponseText("");
 
     addComment(newComment);
   };

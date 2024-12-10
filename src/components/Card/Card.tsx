@@ -1,37 +1,40 @@
 import { useState } from "react";
-import { Comment } from "../../types/types";
+import { Comment, User } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 import ReplyCard from "../ReplyCard/ReplyCard";
 
 type CardProps = {
   comment: Comment;
-  addReply: (newReply: Comment) => void;
+  currentUser: User;
 };
 
-const Card = ({ comment, addReply }: CardProps) => {
-  const [replies, setReplies] = useState(comment?.replies);
+const Card = ({ comment, currentUser, addReply }: CardProps) => {
+  const [replies, setReplies] = useState<Comment[]>(comment?.replies);
   const [replyText, setReplyText] = useState("");
 
   const handleClick = () => {
+    if (replies) {
+      const hasEmptyReplies = replies.some((reply) => !reply.content);
+
+      if (hasEmptyReplies) {
+        replies.filter((reply) => !reply.content);
+        return;
+      }
+    }
+
     const newReply: Comment = {
-      id: Math.floor(Math.random() * 1000),
+      id: Math.floor(Math.random() * 10000),
       content: replyText,
       createdAt: "Today",
       replies: [],
       score: 0,
-      user: {
-        image: {
-          png: "string",
-          webp: "string",
-        },
-        username: "string",
-      },
+      user: currentUser,
     };
-    setReplies((prevReplies) => [...(prevReplies ?? []), newReply]);
-    console.log(replies);
-  };
 
+    setReplies((prevReplies) => [...(prevReplies ?? []), newReply]);
+    addReply(replies);
+  };
   return (
     <div className="bg-lightGray w-full self-center h-auto m-4 md:w-8/12 flex flex-col flex-grow ">
       <div className="bg-white p-4  ">
@@ -42,13 +45,13 @@ const Card = ({ comment, addReply }: CardProps) => {
             className="w-[10%] md:w-[7%]"
           />
           <h1 className="text-darkBlue font-semibold">
-            {comment.user.username}
+            {comment?.user.username}
           </h1>
-          <span>{comment.createdAt}</span>
+          <span>{comment?.createdAt}</span>
         </div>
-        <p className="m-4">{comment.content}</p>
+        <p className="m-4">{comment?.content}</p>
         <div className="flex items-center justify-between">
-          <LikeCounter score={comment.score} />
+          <LikeCounter score={comment?.score} />
           <ReplyButton onHandleClick={handleClick} />
         </div>
       </div>
@@ -56,9 +59,13 @@ const Card = ({ comment, addReply }: CardProps) => {
         {replies &&
           replies.map((reply: Comment) => (
             <ReplyCard
-              key={reply.id}
-              comment={reply}
+              key={reply?.id}
+              reply={reply}
+              setReplies={setReplies}
+              currentUser={currentUser}
               setReplyText={setReplyText}
+              replyText={replyText}
+              replies={replies}
             />
           ))}
       </div>

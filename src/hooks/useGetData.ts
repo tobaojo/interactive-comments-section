@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getFromLocalStorage } from "../utils/utils";
+import { getFromLocalStorage, saveToLocalStorage } from "../utils/utils";
 import { fetchComments, fetchCurrentUser } from "../api/api";
 import { type User, type Comment } from "../types/types";
 
@@ -7,7 +7,7 @@ export function useCurrentUser(): [
   User | null,
   { isLoading: boolean; error: string | null },
 ] {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
@@ -40,17 +40,17 @@ export function useCurrentUser(): [
 }
 
 export function useComments(): [
-  Comment[] | null,
+  Comment[],
   {
     isLoading: boolean;
     error: string | null;
     addComment: (newComment: Comment) => void;
-    addReply: (newReply: Comment) => void;
+    addReply: (replies: Comment[]) => void;
   },
 ] {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [comments, setComments] = useState<Comment[] | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     async function getComments() {
@@ -79,12 +79,15 @@ export function useComments(): [
   }, []);
 
   function addComment(newComment: Comment) {
-    setComments((prevComments) => [...(prevComments ?? []), newComment]);
+    setComments((prevComments) => {
+      const updatedComments = [...(prevComments ?? []), newComment];
+      saveToLocalStorage("comments", updatedComments);
+      return updatedComments;
+    });
   }
 
-  function addReply(newReply: Comment) {
-    console.log(newReply);
-    console.log("first");
+  function addReply(replies: Comment[]) {
+    console.log(replies);
     comments?.map((comment) => console.log(comment.replies));
   }
   return [comments, { isLoading, error, addComment, addReply }];
