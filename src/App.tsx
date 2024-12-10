@@ -8,7 +8,7 @@ function App() {
     currentUser,
     { isLoading: isCurrentUserLoading, error: CurrentUserError },
   ] = useCurrentUser();
-  const [comments, { isLoading, error, addComment }] = useComments();
+  const [comments, { isLoading, error, addComment, addReply }] = useComments();
 
   return (
     <div className="container relative flex flex-col self-center text-grayishBlue p-4 m-4 ">
@@ -16,7 +16,7 @@ function App() {
       {isLoading && <p>loading...</p>}
       {comments &&
         comments?.map((comment: Comment) => (
-          <Card key={comment?.id} comment={comment} />
+          <Card key={comment?.id} comment={comment} addReply={addReply} />
         ))}
       {CurrentUserError && <p>Error: {error}</p>}
       {isCurrentUserLoading && <p>loading...</p>}

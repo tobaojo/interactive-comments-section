@@ -45,6 +45,7 @@ export function useComments(): [
     isLoading: boolean;
     error: string | null;
     addComment: (newComment: Comment) => void;
+    addReply: (newReply: Comment) => void;
   },
 ] {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -80,5 +81,11 @@ export function useComments(): [
   function addComment(newComment: Comment) {
     setComments((prevComments) => [...(prevComments ?? []), newComment]);
   }
-  return [comments, { isLoading, error, addComment }];
+
+  function addReply(newReply: Comment) {
+    console.log(newReply);
+    console.log("first");
+    comments?.map((comment) => console.log(comment.replies));
+  }
+  return [comments, { isLoading, error, addComment, addReply }];
 }

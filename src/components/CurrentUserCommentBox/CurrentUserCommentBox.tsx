@@ -11,9 +11,10 @@ const CurrentUserCommentBox = ({
   addComment,
 }: CurrentUserCommentBoxProps) => {
   const [responseText, setResponseText] = useState("");
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const reply: Comment = {
+    const newComment: Comment = {
       id: Math.floor(Math.random() * 1000),
       content: responseText,
       createdAt: "Today",
@@ -21,8 +22,8 @@ const CurrentUserCommentBox = ({
       score: 0,
       user: currentUser,
     };
-    console.log(reply);
-    addComment(reply);
+
+    addComment(newComment);
   };
   return (
     <div className="bg-white w-full self-center p-4 m-4 md:w-8/12 h-auto sticky bottom-0">
