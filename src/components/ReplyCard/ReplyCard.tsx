@@ -1,5 +1,5 @@
 import React from "react";
-import { User, type Comment } from "../../types/types";
+import { User, Comment } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 
@@ -24,7 +24,6 @@ const ReplyCard = ({
   addReply,
   comment,
 }: ReplyCardProps) => {
-  console.log(reply);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -43,7 +42,6 @@ const ReplyCard = ({
     <>
       {!reply.content ? (
         <div className="bg-white w-[90%] h-auto p-4 ml-4 my-4">
-          <small>{reply.id}</small>
           <form
             className="grid grid-cols-2 grid-rows-1 md:flex md:flex-row space-x-2 gap-4"
             onSubmit={handleSubmit}
@@ -83,7 +81,7 @@ const ReplyCard = ({
           </div>
           <p className="m-4">{reply.content}</p>
           <div className="flex items-center justify-between">
-            <LikeCounter score={reply.score} />
+            <LikeCounter score={reply.score} comment={reply} />
             <ReplyButton onHandleClick={() => console.log("Reply")} />
           </div>
         </div>

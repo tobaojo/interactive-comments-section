@@ -25,7 +25,7 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
     }
 
     const newReply: Comment = {
-      id: Math.floor(Math.random() * 10000),
+      id: Math.floor(Math.random() * 100000),
       content: replyText,
       createdAt: "Today",
       replies: [],

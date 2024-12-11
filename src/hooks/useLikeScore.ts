@@ -1,35 +1,44 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getFromLocalStorage, saveToLocalStorage } from "../utils/utils";
-import { type Comment } from "../types/types";
+import { Comment } from "../types/types";
 
-export function useLikeScore(
-  score: number,
-): [
+export function useLikeScore(score: number): [
   number,
-  { incrementLikeCount: () => void; decrementLikeCount: () => void },
+  {
+    incrementLikeCount: () => void;
+    decrementLikeCount: () => void;
+    setOldComment: React.Dispatch<React.SetStateAction<Comment | null>>;
+  },
 ] {
   const [likeCount, setLikeCount] = useState(score);
   const [oldComment, setOldComment] = useState<Comment | null>(null);
-  const incrementLikeCount = () => setLikeCount(likeCount + 1);
 
+  const incrementLikeCount = () => setLikeCount(likeCount + 1);
   const decrementLikeCount = () => setLikeCount(likeCount - 1);
 
   useEffect(() => {
     async function updateCommentscore() {
       try {
-        const cachedComments: Comment[] = getFromLocalStorage("comments");
+        const cachedComments: Comment[] =
+          getFromLocalStorage<Comment[]>("comments") ?? [];
 
-        if (cachedComments) {
-          const updatedComments = cachedComments.map((comment) => {
-            if (oldComment?.id === comment.id) {
-              return { ...comment, score: likeCount };
-            } else {
-              return comment;
-            }
-          });
-          //   console.log(updatedComments);
-          saveToLocalStorage("comments", updatedComments);
-        }
+        const updatedComments = cachedComments.map((comment) => {
+          if (oldComment?.id === comment.id) {
+            return { ...comment, score: likeCount };
+          } else if (comment.replies) {
+            const updatedReplies = comment.replies.map((reply) => {
+              if (oldComment?.id === reply.id) {
+                return { ...reply, score: likeCount };
+              }
+              return reply;
+            });
+            return { ...comment, replies: updatedReplies };
+          }
+          return comment;
+        });
+
+        saveToLocalStorage("comments", updatedComments);
+        console.log("Updated Comments with Replies:", updatedComments);
       } catch (error) {
         console.error(error);
       }

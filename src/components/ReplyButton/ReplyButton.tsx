@@ -1,7 +1,10 @@
 import ReplyIcon from "../Icons/ReplyIcon";
-import { type Comment } from "../../types/types";
 
-const ReplyButton = ({ onHandleClick }) => {
+type ReplyButtonProps = {
+  onHandleClick: () => void;
+};
+
+const ReplyButton = ({ onHandleClick }: ReplyButtonProps) => {
   return (
     <button
       className="flex space-x-1 items-center p-1 hover:opacity-50"
