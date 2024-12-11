@@ -33,7 +33,7 @@ const CurrentUserCommentBox = ({
         onSubmit={handleSubmit}
       >
         <img
-          src={currentUser?.image.png}
+          src={currentUser?.image?.png}
           alt={`USER - currentUser`}
           className="w-[20%] order-2 flex-1 md:order-1 md:self-center"
         />

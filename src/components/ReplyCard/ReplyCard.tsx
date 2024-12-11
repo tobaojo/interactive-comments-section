@@ -32,7 +32,6 @@ const ReplyCard = ({
     });
     setReplies(updatedReplies);
     setReplyText("");
-    console.log(replies);
   };
   return (
     <>

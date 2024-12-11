@@ -13,7 +13,6 @@ export function useCurrentUser(): [
 
   useEffect(() => {
     async function getCurrentUser() {
-      setIsLoading(true);
       try {
         const cachedUser = getFromLocalStorage<User>("currentUser");
         if (cachedUser) {
@@ -76,6 +75,7 @@ export function useComments(): [
       }
     }
     getComments();
+    setIsLoading(false);
   }, []);
 
   function addComment(newComment: Comment) {

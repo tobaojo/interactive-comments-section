@@ -9,25 +9,30 @@ function App() {
     { isLoading: isCurrentUserLoading, error: CurrentUserError },
   ] = useCurrentUser();
   const [comments, { isLoading, error, addComment, addReply }] = useComments();
-  console.log(isLoading);
-
-  if (isLoading || isCurrentUserLoading) {
-    return <p>Loading...</p>; // Show loading state
-  }
 
   if (error || CurrentUserError) {
     return <p>Error: {error || CurrentUserError}</p>; // Show error state
   }
+
+  if (
+    comments.length === 0 ||
+    isLoading ||
+    isCurrentUserLoading ||
+    !currentUser
+  ) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="container relative flex flex-col self-center text-grayishBlue p-4 m-4 ">
-      {comments.map((comment: Comment) => (
-        <Card
-          key={comment?.id}
-          comment={comment}
-          addReply={addReply}
-          currentUser={currentUser}
-        />
-      ))}
+      {comments &&
+        comments?.map((comment: Comment) => (
+          <Card
+            key={comment?.id}
+            comment={comment}
+            addReply={addReply}
+            currentUser={currentUser}
+          />
+        ))}
 
       {currentUser && (
         <CurrentUserCommentBox

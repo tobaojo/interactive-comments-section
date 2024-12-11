@@ -40,7 +40,7 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
       <div className="bg-white p-4  ">
         <div className="flex space-x-4 items-center p-2">
           <img
-            src={comment?.user?.image.png}
+            src={comment?.user?.image?.png}
             alt={`user - ${comment?.user?.username}`}
             className="w-[10%] md:w-[7%]"
           />

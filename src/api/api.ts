@@ -7,9 +7,8 @@ export async function fetchCurrentUser() {
       throw new Error("HTTP Error");
     }
     const data = await res.json();
-    console.log(data);
     saveToLocalStorage(`currentUser`, data?.currentUser);
-    return data;
+    return data.currentUser;
   } catch (error) {
     throw new Error(`Error fetching data ${error}`);
   }
@@ -22,9 +21,9 @@ export async function fetchComments() {
       throw new Error("HTTP Error");
     }
     const data = await res.json();
-    console.log(data);
+
     saveToLocalStorage(`comments`, data?.comments);
-    return data;
+    return data.comments;
   } catch (error) {
     throw new Error(`Error fetching data ${error}`);
   }
