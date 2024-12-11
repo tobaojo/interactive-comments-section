@@ -1,11 +1,9 @@
-import { useState } from "react";
-
 type LikeCounterProps = {
-  score: number;
+  likeCount: number;
+  setLikeCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const LikeCounter = ({ score }: LikeCounterProps) => {
-  const [likeCount, setLikeCount] = useState(score);
+const LikeCounter = ({ setLikeCount, likeCount }: LikeCounterProps) => {
   const incrementLikeCount = () => setLikeCount(likeCount + 1);
   const decrementLikeCount = () => setLikeCount(likeCount - 1);
   return (

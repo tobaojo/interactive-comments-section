@@ -5,11 +5,14 @@ import ReplyButton from "../ReplyButton/ReplyButton";
 
 type ReplyCardProps = {
   reply: Comment;
+  comment: Comment;
   currentUser: User;
   replyText: string;
   setReplyText: React.Dispatch<React.SetStateAction<string>>;
   setReplies: React.Dispatch<React.SetStateAction<Comment[]>>;
   replies: Comment[];
+  setLikeCount: React.Dispatch<React.SetStateAction<number>>;
+  addReply: (comment: Comment, replies: Comment[]) => void;
 };
 
 const ReplyCard = ({
@@ -19,7 +22,11 @@ const ReplyCard = ({
   setReplyText,
   setReplies,
   replies,
+  addReply,
+  comment,
+  setLikeCount,
 }: ReplyCardProps) => {
+  console.log(reply);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -32,6 +39,7 @@ const ReplyCard = ({
     });
     setReplies(updatedReplies);
     setReplyText("");
+    addReply(comment, updatedReplies);
   };
   return (
     <>
@@ -77,7 +85,7 @@ const ReplyCard = ({
           </div>
           <p className="m-4">{reply.content}</p>
           <div className="flex items-center justify-between">
-            <LikeCounter score={reply.score} />
+            <LikeCounter likeCount={reply.score} setLikeCount={setLikeCount} />
             <ReplyButton onHandleClick={() => console.log("Reply")} />
           </div>
         </div>

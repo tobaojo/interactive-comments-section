@@ -10,7 +10,7 @@ export type Comment = {
   id: number;
   content: string;
   createdAt: string;
-  replies: [];
+  replies?: Comment[];
   score: number;
   user: User;
 };

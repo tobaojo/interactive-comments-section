@@ -7,11 +7,13 @@ import ReplyCard from "../ReplyCard/ReplyCard";
 type CardProps = {
   comment: Comment;
   currentUser: User;
+  addReply: (comment: Comment, replies: Comment[]) => void;
 };
 
 const Card = ({ comment, currentUser, addReply }: CardProps) => {
-  const [replies, setReplies] = useState<Comment[]>(comment?.replies);
+  const [replies, setReplies] = useState<Comment[]>(comment?.replies || []);
   const [replyText, setReplyText] = useState("");
+  const [likeCount, setLikeCount] = useState(comment?.score);
 
   const handleClick = () => {
     if (replies) {
@@ -28,12 +30,11 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
       content: replyText,
       createdAt: "Today",
       replies: [],
-      score: 0,
+      score: likeCount,
       user: currentUser,
     };
 
     setReplies((prevReplies) => [...(prevReplies ?? []), newReply]);
-    addReply(replies);
   };
   return (
     <div className="bg-lightGray w-full self-center h-auto m-4 md:w-8/12 flex flex-col flex-grow ">
@@ -51,7 +52,7 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
         </div>
         <p className="m-4">{comment?.content}</p>
         <div className="flex items-center justify-between">
-          <LikeCounter score={comment?.score} />
+          <LikeCounter likeCount={likeCount} setLikeCount={setLikeCount} />
           <ReplyButton onHandleClick={handleClick} />
         </div>
       </div>
@@ -66,6 +67,9 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
               setReplyText={setReplyText}
               replyText={replyText}
               replies={replies}
+              comment={comment}
+              addReply={addReply}
+              setLikeCount={setLikeCount}
             />
           ))}
       </div>

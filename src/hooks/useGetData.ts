@@ -44,7 +44,7 @@ export function useComments(): [
     isLoading: boolean;
     error: string | null;
     addComment: (newComment: Comment) => void;
-    addReply: (replies: Comment[]) => void;
+    addReply: (oldComment: Comment, replies: Comment[]) => void;
   },
 ] {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -86,9 +86,18 @@ export function useComments(): [
     });
   }
 
-  function addReply(replies: Comment[]) {
-    console.log(replies);
-    comments?.map((comment) => console.log(comment.replies));
+  function addReply(oldComment: Comment, replies: Comment[]) {
+    const updatedComments: Comment[] = comments.map((comment: Comment) => {
+      if (comment.id === oldComment.id) {
+        return {
+          ...comment,
+          replies: [...(oldComment.replies ?? []), ...replies],
+        };
+      } else {
+        return comment;
+      }
+    });
+    saveToLocalStorage("comments", updatedComments);
   }
   return [comments, { isLoading, error, addComment, addReply }];
 }
