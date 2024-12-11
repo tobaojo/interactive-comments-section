@@ -1,15 +1,22 @@
 type LikeCounterProps = {
-  likeCount: number;
-  setLikeCount: React.Dispatch<React.SetStateAction<number>>;
+  score: number;
+  comment: Comment;
 };
 
-const LikeCounter = ({ setLikeCount, likeCount }: LikeCounterProps) => {
-  const incrementLikeCount = () => setLikeCount(likeCount + 1);
-  const decrementLikeCount = () => setLikeCount(likeCount - 1);
+import { useLikeScore } from "../../hooks/useLikeScore";
+
+const LikeCounter = ({ score, comment }: LikeCounterProps) => {
+  const [likeCount, { incrementLikeCount, decrementLikeCount, setOldComment }] =
+    useLikeScore(score);
+  const handleClick = (comment) => {
+    setOldComment(comment);
+    incrementLikeCount();
+  };
+
   return (
     <div className="flex space-x-4 bg-veryLightGray px-4 py-1 rounded-xl text-xl">
       <button
-        onClick={incrementLikeCount}
+        onClick={() => handleClick(comment)}
         className="font-semibold text-grayishBlue"
       >
         +

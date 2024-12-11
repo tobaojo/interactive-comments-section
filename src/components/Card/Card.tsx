@@ -13,7 +13,6 @@ type CardProps = {
 const Card = ({ comment, currentUser, addReply }: CardProps) => {
   const [replies, setReplies] = useState<Comment[]>(comment?.replies || []);
   const [replyText, setReplyText] = useState("");
-  const [likeCount, setLikeCount] = useState(comment?.score);
 
   const handleClick = () => {
     if (replies) {
@@ -30,7 +29,7 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
       content: replyText,
       createdAt: "Today",
       replies: [],
-      score: likeCount,
+      score: 0,
       user: currentUser,
     };
 
@@ -52,7 +51,7 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
         </div>
         <p className="m-4">{comment?.content}</p>
         <div className="flex items-center justify-between">
-          <LikeCounter likeCount={likeCount} setLikeCount={setLikeCount} />
+          <LikeCounter score={comment?.score} comment={comment} />
           <ReplyButton onHandleClick={handleClick} />
         </div>
       </div>
@@ -69,7 +68,6 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
               replies={replies}
               comment={comment}
               addReply={addReply}
-              setLikeCount={setLikeCount}
             />
           ))}
       </div>

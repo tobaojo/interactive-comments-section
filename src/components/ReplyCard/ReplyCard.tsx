@@ -11,7 +11,6 @@ type ReplyCardProps = {
   setReplyText: React.Dispatch<React.SetStateAction<string>>;
   setReplies: React.Dispatch<React.SetStateAction<Comment[]>>;
   replies: Comment[];
-  setLikeCount: React.Dispatch<React.SetStateAction<number>>;
   addReply: (comment: Comment, replies: Comment[]) => void;
 };
 
@@ -24,7 +23,6 @@ const ReplyCard = ({
   replies,
   addReply,
   comment,
-  setLikeCount,
 }: ReplyCardProps) => {
   console.log(reply);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -85,7 +83,7 @@ const ReplyCard = ({
           </div>
           <p className="m-4">{reply.content}</p>
           <div className="flex items-center justify-between">
-            <LikeCounter likeCount={reply.score} setLikeCount={setLikeCount} />
+            <LikeCounter score={reply.score} />
             <ReplyButton onHandleClick={() => console.log("Reply")} />
           </div>
         </div>

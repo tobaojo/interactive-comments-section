@@ -1,6 +1,7 @@
 import Card from "./components/Card/Card";
 import CurrentUserCommentBox from "./components/CurrentUserCommentBox/CurrentUserCommentBox";
 import { useComments, useCurrentUser } from "./hooks/useGetData";
+
 import { type Comment } from "./types/types";
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
   const [comments, { isLoading, error, addComment, addReply }] = useComments();
 
   if (error || CurrentUserError) {
-    return <p>Error: {error || CurrentUserError}</p>; // Show error state
+    return <p>Error: {error || CurrentUserError}</p>;
   }
 
   if (
