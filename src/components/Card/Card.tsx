@@ -4,6 +4,7 @@ import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 import ReplyCard from "../ReplyCard/ReplyCard";
 import EditButton from "../EditButton/EditButton";
+import DeleteButton from "../DeleteButton/DeleteButton";
 
 type CardProps = {
   comment: Comment;
@@ -11,6 +12,8 @@ type CardProps = {
   addReply: (comment: Comment, replies: Comment[]) => void;
   editComment: (editedComment: Comment) => void;
   editReply: (Oldcomment: Comment, editedReply: Comment) => void;
+  deleteComment: (deletedComment: Comment) => void;
+  deleteReply: (comment: Comment, deletedReply: Comment) => void;
 };
 
 const Card = ({
@@ -19,6 +22,8 @@ const Card = ({
   addReply,
   editComment,
   editReply,
+  deleteComment,
+  deleteReply,
 }: CardProps) => {
   const [replies, setReplies] = useState<Comment[]>(comment?.replies || []);
   const [replyText, setReplyText] = useState("");
@@ -54,6 +59,10 @@ const Card = ({
     };
     editComment(editedComment);
   };
+
+  const handleDeleteClick = (comment: Comment) => {
+    deleteComment(comment);
+  };
   return (
     <div className="bg-lightGray w-full self-center h-auto m-4 md:w-8/12 flex flex-col flex-grow ">
       <div className="bg-white p-4 ">
@@ -67,13 +76,14 @@ const Card = ({
             {comment?.user.username}
           </h1>
           <span>{comment?.createdAt}</span>
-          {comment.user.username === currentUser.username ? (
-            <EditButton
-              onHandleClick={() => handleEditClick(comment)}
-              isEditing={isEditing}
-            />
-          ) : (
-            ""
+          {comment.user.username === currentUser.username && (
+            <>
+              <EditButton
+                onHandleClick={() => handleEditClick(comment)}
+                isEditing={isEditing}
+              />
+              <DeleteButton onHandleClick={() => handleDeleteClick(comment)} />
+            </>
           )}
         </div>
         {isEditing && comment.user.username === currentUser.username ? (
@@ -105,6 +115,7 @@ const Card = ({
               comment={comment}
               addReply={addReply}
               editReply={editReply}
+              deleteReply={deleteReply}
             />
           ))}
       </div>

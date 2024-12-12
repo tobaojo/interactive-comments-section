@@ -47,6 +47,8 @@ export function useComments(): [
     addReply: (oldComment: Comment, replies: Comment[]) => void;
     editComment: (editComment: Comment) => void;
     editReply: (oldComment: Comment, editedReply: Comment) => void;
+    deleteComment: (deletedComment: Comment) => void;
+    deleteReply: (comment: Comment, deletedReply: Comment) => void;
   },
 ] {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -100,6 +102,16 @@ export function useComments(): [
     saveToLocalStorage("comments", updatedComments);
   }
 
+  function deleteComment(deletedComment: Comment) {
+    setComments((prevComments) => {
+      const updatedComments = prevComments.filter((comment: Comment) => {
+        return comment.id !== deletedComment.id;
+      });
+      saveToLocalStorage("comments", updatedComments);
+      return updatedComments;
+    });
+  }
+
   function addReply(oldComment: Comment, replies: Comment[]) {
     const updatedComments: Comment[] = comments.map((comment: Comment) => {
       if (comment.id === oldComment.id) {
@@ -115,7 +127,6 @@ export function useComments(): [
   }
 
   function editReply(oldComment: Comment, editedReply: Comment) {
-    console.log(oldComment);
     const updatedComments = comments.map((comment) => {
       if (oldComment.id === comment.id) {
         const updatedReplies = comment.replies?.map((reply) => {
@@ -135,8 +146,39 @@ export function useComments(): [
     });
     saveToLocalStorage("comments", updatedComments);
   }
+
+  function deleteReply(parentComment: Comment, deletedReply: Comment) {
+    setComments((prevComments) => {
+      const updatedComments = prevComments.map((comment) => {
+        if (comment.id === parentComment.id) {
+          const updatedReplies = comment.replies?.filter((reply) => {
+            return reply.id !== deletedReply.id;
+          });
+          return {
+            ...comment,
+            replies: updatedReplies,
+          };
+        } else {
+          return comment;
+        }
+      });
+      console.log(updatedComments);
+      // saveToLocalStorage("comments", updatedComments);
+      return updatedComments;
+    });
+  }
+
   return [
     comments,
-    { isLoading, error, addComment, addReply, editComment, editReply },
+    {
+      isLoading,
+      error,
+      addComment,
+      addReply,
+      editComment,
+      editReply,
+      deleteComment,
+      deleteReply,
+    },
   ];
 }

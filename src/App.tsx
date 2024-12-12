@@ -12,7 +12,16 @@ function App() {
 
   const [
     comments,
-    { isLoading, error, addComment, addReply, editComment, editReply },
+    {
+      isLoading,
+      error,
+      addComment,
+      addReply,
+      editComment,
+      editReply,
+      deleteComment,
+      deleteReply,
+    },
   ] = useComments();
 
   if (error || CurrentUserError) {
@@ -27,6 +36,7 @@ function App() {
   ) {
     return <p>Loading...</p>;
   }
+
   return (
     <div className="container relative flex flex-col self-center text-grayishBlue p-4 m-4 ">
       {comments &&
@@ -38,6 +48,8 @@ function App() {
             currentUser={currentUser}
             editComment={editComment}
             editReply={editReply}
+            deleteComment={deleteComment}
+            deleteReply={deleteReply}
           />
         ))}
 

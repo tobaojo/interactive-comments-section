@@ -3,6 +3,7 @@ import { User, Comment } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 import EditButton from "../EditButton/EditButton";
+import DeleteButton from "../DeleteButton/DeleteButton";
 
 type ReplyCardProps = {
   reply: Comment;
@@ -14,6 +15,7 @@ type ReplyCardProps = {
   replies: Comment[];
   addReply: (comment: Comment, replies: Comment[]) => void;
   editReply: (oldComment: Comment, editedReply: Comment) => void;
+  deleteReply: (comment: Comment, deletedReply: Comment) => void;
 };
 
 const ReplyCard = ({
@@ -26,6 +28,7 @@ const ReplyCard = ({
   addReply,
   comment,
   editReply,
+  deleteReply,
 }: ReplyCardProps) => {
   const [commentContent, setCommentContent] = useState(reply?.content);
   const [isEditing, setIsEditing] = useState(false);
@@ -76,6 +79,10 @@ const ReplyCard = ({
     editReply(comment, editedReply);
   };
 
+  const handleDeleteClick = (comment: Comment, deletedReply: Comment) => {
+    deleteReply(comment, deletedReply);
+  };
+
   return (
     <>
       {!reply.content ? (
@@ -117,10 +124,15 @@ const ReplyCard = ({
             </h1>
             <span>{reply.createdAt}</span>
             {reply.user.username === currentUser.username ? (
-              <EditButton
-                onHandleClick={() => handleEditReplyClick(reply)}
-                isEditing={isEditing}
-              />
+              <>
+                <EditButton
+                  onHandleClick={() => handleEditReplyClick(reply)}
+                  isEditing={isEditing}
+                />
+                <DeleteButton
+                  onHandleClick={() => handleDeleteClick(comment, reply)}
+                />
+              </>
             ) : (
               ""
             )}
