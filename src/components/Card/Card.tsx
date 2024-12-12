@@ -3,16 +3,27 @@ import { Comment, User } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 import ReplyCard from "../ReplyCard/ReplyCard";
+import EditButton from "../EditButton/EditButton";
 
 type CardProps = {
   comment: Comment;
   currentUser: User;
   addReply: (comment: Comment, replies: Comment[]) => void;
+  editComment: (editedComment: Comment) => void;
+  editReply: (Oldcomment: Comment, editedReply: Comment) => void;
 };
 
-const Card = ({ comment, currentUser, addReply }: CardProps) => {
+const Card = ({
+  comment,
+  currentUser,
+  addReply,
+  editComment,
+  editReply,
+}: CardProps) => {
   const [replies, setReplies] = useState<Comment[]>(comment?.replies || []);
   const [replyText, setReplyText] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [commentContent, setCommentContent] = useState(comment?.content);
 
   const handleClick = () => {
     if (replies) {
@@ -23,7 +34,6 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
         return;
       }
     }
-
     const newReply: Comment = {
       id: Math.floor(Math.random() * 100000),
       content: replyText,
@@ -35,9 +45,18 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
 
     setReplies((prevReplies) => [...(prevReplies ?? []), newReply]);
   };
+
+  const handleEditClick = (comment: Comment) => {
+    setIsEditing(!isEditing);
+    const editedComment = {
+      ...comment,
+      content: commentContent,
+    };
+    editComment(editedComment);
+  };
   return (
     <div className="bg-lightGray w-full self-center h-auto m-4 md:w-8/12 flex flex-col flex-grow ">
-      <div className="bg-white p-4  ">
+      <div className="bg-white p-4 ">
         <div className="flex space-x-4 items-center p-2">
           <img
             src={comment?.user?.image?.png}
@@ -48,8 +67,25 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
             {comment?.user.username}
           </h1>
           <span>{comment?.createdAt}</span>
+          {comment.user.username === currentUser.username ? (
+            <EditButton
+              onHandleClick={() => handleEditClick(comment)}
+              isEditing={isEditing}
+            />
+          ) : (
+            ""
+          )}
         </div>
-        <p className="m-4">{comment?.content}</p>
+        {isEditing && comment.user.username === currentUser.username ? (
+          <textarea
+            name="content"
+            value={commentContent}
+            onChange={(e) => setCommentContent(e.target.value)}
+            className="border border-lightGray w-full p-4 rounded-xl col-span-2 order-1 md:order-2"
+          ></textarea>
+        ) : (
+          <p className="m-4">{commentContent}</p>
+        )}
         <div className="flex items-center justify-between">
           <LikeCounter score={comment?.score} comment={comment} />
           <ReplyButton onHandleClick={handleClick} />
@@ -68,6 +104,7 @@ const Card = ({ comment, currentUser, addReply }: CardProps) => {
               replies={replies}
               comment={comment}
               addReply={addReply}
+              editReply={editReply}
             />
           ))}
       </div>

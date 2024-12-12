@@ -45,6 +45,8 @@ export function useComments(): [
     error: string | null;
     addComment: (newComment: Comment) => void;
     addReply: (oldComment: Comment, replies: Comment[]) => void;
+    editComment: (editComment: Comment) => void;
+    editReply: (oldComment: Comment, editedReply: Comment) => void;
   },
 ] {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -86,6 +88,18 @@ export function useComments(): [
     });
   }
 
+  function editComment(editedComment: Comment) {
+    const updatedComments = comments.map((comment) => {
+      if (comment?.id === editedComment.id) {
+        return editedComment;
+      } else {
+        return comment;
+      }
+    });
+
+    saveToLocalStorage("comments", updatedComments);
+  }
+
   function addReply(oldComment: Comment, replies: Comment[]) {
     const updatedComments: Comment[] = comments.map((comment: Comment) => {
       if (comment.id === oldComment.id) {
@@ -99,5 +113,30 @@ export function useComments(): [
     });
     saveToLocalStorage("comments", updatedComments);
   }
-  return [comments, { isLoading, error, addComment, addReply }];
+
+  function editReply(oldComment: Comment, editedReply: Comment) {
+    console.log(oldComment);
+    const updatedComments = comments.map((comment) => {
+      if (oldComment.id === comment.id) {
+        const updatedReplies = comment.replies?.map((reply) => {
+          if (reply.id === editedReply.id) {
+            return editedReply;
+          } else {
+            return reply;
+          }
+        });
+        return {
+          ...comment,
+          replies: updatedReplies,
+        };
+      } else {
+        return comment;
+      }
+    });
+    saveToLocalStorage("comments", updatedComments);
+  }
+  return [
+    comments,
+    { isLoading, error, addComment, addReply, editComment, editReply },
+  ];
 }

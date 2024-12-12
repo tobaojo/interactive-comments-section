@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { User, Comment } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
+import EditButton from "../EditButton/EditButton";
 
 type ReplyCardProps = {
   reply: Comment;
@@ -12,6 +13,7 @@ type ReplyCardProps = {
   setReplies: React.Dispatch<React.SetStateAction<Comment[]>>;
   replies: Comment[];
   addReply: (comment: Comment, replies: Comment[]) => void;
+  editReply: (oldComment: Comment, editedReply: Comment) => void;
 };
 
 const ReplyCard = ({
@@ -23,7 +25,11 @@ const ReplyCard = ({
   replies,
   addReply,
   comment,
+  editReply,
 }: ReplyCardProps) => {
+  const [commentContent, setCommentContent] = useState(reply?.content);
+  const [isEditing, setIsEditing] = useState(false);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -38,6 +44,38 @@ const ReplyCard = ({
     setReplyText("");
     addReply(comment, updatedReplies);
   };
+
+  const handleClick = () => {
+    if (replies) {
+      const hasEmptyReplies = replies.some((reply) => !reply.content);
+
+      if (hasEmptyReplies) {
+        replies.filter((reply) => !reply.content);
+        return;
+      }
+    }
+
+    const newReply: Comment = {
+      id: Math.floor(Math.random() * 100000),
+      content: replyText,
+      createdAt: "Today",
+      replies: [],
+      score: 0,
+      user: currentUser,
+    };
+
+    setReplies((prevReplies) => [...(prevReplies ?? []), newReply]);
+  };
+
+  const handleEditReplyClick = (reply: Comment) => {
+    setIsEditing(!isEditing);
+    const editedReply = {
+      ...reply,
+      content: commentContent,
+    };
+    editReply(comment, editedReply);
+  };
+
   return (
     <>
       {!reply.content ? (
@@ -78,11 +116,28 @@ const ReplyCard = ({
               {reply.user.username}
             </h1>
             <span>{reply.createdAt}</span>
+            {reply.user.username === currentUser.username ? (
+              <EditButton
+                onHandleClick={() => handleEditReplyClick(reply)}
+                isEditing={isEditing}
+              />
+            ) : (
+              ""
+            )}
           </div>
-          <p className="m-4">{reply.content}</p>
+          {isEditing && reply.user.username === currentUser.username ? (
+            <textarea
+              name="content"
+              value={commentContent}
+              onChange={(e) => setCommentContent(e.target.value)}
+              className="border border-lightGray w-full p-4 rounded-xl col-span-2 order-1 md:order-2"
+            ></textarea>
+          ) : (
+            <p className="m-4">{commentContent}</p>
+          )}
           <div className="flex items-center justify-between">
             <LikeCounter score={reply.score} comment={reply} />
-            <ReplyButton onHandleClick={() => console.log("Reply")} />
+            <ReplyButton onHandleClick={handleClick} />
           </div>
         </div>
       )}

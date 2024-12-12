@@ -11,6 +11,7 @@ export type Comment = {
   content: string;
   createdAt: string;
   replies?: Comment[];
+  replyingTo?: string;
   score: number;
   user: User;
 };

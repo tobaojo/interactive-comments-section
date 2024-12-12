@@ -9,7 +9,11 @@ function App() {
     currentUser,
     { isLoading: isCurrentUserLoading, error: CurrentUserError },
   ] = useCurrentUser();
-  const [comments, { isLoading, error, addComment, addReply }] = useComments();
+
+  const [
+    comments,
+    { isLoading, error, addComment, addReply, editComment, editReply },
+  ] = useComments();
 
   if (error || CurrentUserError) {
     return <p>Error: {error || CurrentUserError}</p>;
@@ -32,6 +36,8 @@ function App() {
             comment={comment}
             addReply={addReply}
             currentUser={currentUser}
+            editComment={editComment}
+            editReply={editReply}
           />
         ))}
 

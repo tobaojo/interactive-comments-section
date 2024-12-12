@@ -38,7 +38,6 @@ export function useLikeScore(score: number): [
         });
 
         saveToLocalStorage("comments", updatedComments);
-        console.log("Updated Comments with Replies:", updatedComments);
       } catch (error) {
         console.error(error);
       }
