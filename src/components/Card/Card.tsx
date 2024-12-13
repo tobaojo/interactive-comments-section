@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Comment, User } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
@@ -29,6 +29,10 @@ const Card = ({
   const [replyText, setReplyText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [commentContent, setCommentContent] = useState(comment?.content);
+
+  useEffect(() => {
+    setReplies(comment?.replies ?? []);
+  }, [comment.replies]);
 
   const handleClick = () => {
     if (replies) {
@@ -63,6 +67,7 @@ const Card = ({
   const handleDeleteClick = (comment: Comment) => {
     deleteComment(comment);
   };
+
   return (
     <div className="bg-lightGray w-full self-center h-auto m-4 md:w-8/12 flex flex-col flex-grow ">
       <div className="bg-white p-4 ">

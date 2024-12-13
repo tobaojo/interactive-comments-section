@@ -117,11 +117,10 @@ export function useComments(): [
       if (comment.id === oldComment.id) {
         return {
           ...comment,
-          replies: [...(oldComment.replies ?? []), ...replies],
+          replies,
         };
-      } else {
-        return comment;
       }
+      return comment;
     });
     saveToLocalStorage("comments", updatedComments);
   }
@@ -150,20 +149,26 @@ export function useComments(): [
   function deleteReply(parentComment: Comment, deletedReply: Comment) {
     setComments((prevComments) => {
       const updatedComments = prevComments.map((comment) => {
+        // Check if this is the parent comment
         if (comment.id === parentComment.id) {
-          const updatedReplies = comment.replies?.filter((reply) => {
-            return reply.id !== deletedReply.id;
-          });
+          // Filter out the deleted reply from replies
+          const updatedReplies = comment.replies?.filter(
+            (reply) => reply.id !== deletedReply.id,
+          );
+
           return {
             ...comment,
-            replies: updatedReplies,
+            replies: updatedReplies ?? [], // Ensure replies is always an array
           };
-        } else {
-          return comment;
         }
+
+        // Return other comments unchanged
+        return comment;
       });
-      console.log(updatedComments);
-      // saveToLocalStorage("comments", updatedComments);
+
+      // Persist updated comments to local storage
+      saveToLocalStorage("comments", updatedComments);
+
       return updatedComments;
     });
   }

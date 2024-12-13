@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { User, Comment } from "../../types/types";
 import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
@@ -39,14 +39,18 @@ const ReplyCard = ({
     const updatedReplies = replies.map((blankReply) => {
       if (blankReply.id === reply.id) {
         return { ...blankReply, content: replyText };
-      } else {
-        return blankReply;
       }
+      return blankReply;
     });
+
     setReplies(updatedReplies);
     setReplyText("");
     addReply(comment, updatedReplies);
   };
+
+  useEffect(() => {
+    setCommentContent(reply.content);
+  }, [reply.content]);
 
   const handleClick = () => {
     if (replies) {
@@ -68,6 +72,7 @@ const ReplyCard = ({
     };
 
     setReplies((prevReplies) => [...(prevReplies ?? []), newReply]);
+    setReplyText("");
   };
 
   const handleEditReplyClick = (reply: Comment) => {
@@ -82,7 +87,6 @@ const ReplyCard = ({
   const handleDeleteClick = (comment: Comment, deletedReply: Comment) => {
     deleteReply(comment, deletedReply);
   };
-
   return (
     <>
       {!reply.content ? (
@@ -123,7 +127,7 @@ const ReplyCard = ({
               {reply.user.username}
             </h1>
             <span>{reply.createdAt}</span>
-            {reply.user.username === currentUser.username ? (
+            {reply.user.username === currentUser.username && (
               <>
                 <EditButton
                   onHandleClick={() => handleEditReplyClick(reply)}
@@ -133,8 +137,6 @@ const ReplyCard = ({
                   onHandleClick={() => handleDeleteClick(comment, reply)}
                 />
               </>
-            ) : (
-              ""
             )}
           </div>
           {isEditing && reply.user.username === currentUser.username ? (
