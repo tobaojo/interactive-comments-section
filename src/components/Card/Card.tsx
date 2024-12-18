@@ -6,6 +6,7 @@ import ReplyCard from "../ReplyCard/ReplyCard";
 import EditButton from "../EditButton/EditButton";
 import DeleteButton from "../DeleteButton/DeleteButton";
 import DeleteModal from "../Modal/DeleteModal/DeleteModal";
+import DeleteModalContent from "../DeleteModalContent/DeleteModalContent";
 
 type CardProps = {
   comment: Comment;
@@ -81,7 +82,11 @@ const Card = ({
         closeModal={closeModal}
         handleDeleteClick={handleDeleteClick}
       >
-        hello
+        <DeleteModalContent
+          handleDeleteClick={handleDeleteClick}
+          comment={comment}
+          closeModal={closeModal}
+        />
       </DeleteModal>
       <div className="bg-lightGray w-full self-center h-auto m-4 md:w-8/12 flex flex-col flex-grow ">
         <div className="bg-white p-4 ">

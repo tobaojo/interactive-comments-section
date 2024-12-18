@@ -4,6 +4,8 @@ import LikeCounter from "../LikeCounter/LikeCounter";
 import ReplyButton from "../ReplyButton/ReplyButton";
 import EditButton from "../EditButton/EditButton";
 import DeleteButton from "../DeleteButton/DeleteButton";
+import DeleteModal from "../Modal/DeleteModal/DeleteModal";
+import DeleteModalContent from "../DeleteModalContent/DeleteModalContent";
 
 type ReplyCardProps = {
   reply: Comment;
@@ -32,6 +34,11 @@ const ReplyCard = ({
 }: ReplyCardProps) => {
   const [commentContent, setCommentContent] = useState(reply?.content);
   const [isEditing, setIsEditing] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const openModal = () => setIsOpen(true);
+
+  const closeModal = () => setIsOpen(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,11 +91,29 @@ const ReplyCard = ({
     editReply(comment, editedReply);
   };
 
-  const handleDeleteClick = (comment: Comment, deletedReply: Comment) => {
-    deleteReply(comment, deletedReply);
+  const handleDeleteReplyClick = (comment: Comment, deletedReply?: Comment) => {
+    if (deletedReply) {
+      deleteReply(comment, deletedReply);
+    } else {
+      return;
+    }
   };
+
+  // () => handleDeleteClick(comment, reply)
   return (
     <>
+      <DeleteModal
+        isModalOpen={modalIsOpen}
+        closeModal={closeModal}
+        handleDeleteClick={handleDeleteReplyClick}
+      >
+        <DeleteModalContent
+          handleDeleteClick={handleDeleteReplyClick}
+          comment={comment}
+          deletedReply={reply}
+          closeModal={closeModal}
+        />
+      </DeleteModal>
       {!reply.content ? (
         <div className="bg-white w-[90%] h-auto p-4 ml-4 my-4">
           <form
@@ -133,9 +158,7 @@ const ReplyCard = ({
                   onHandleClick={() => handleEditReplyClick(reply)}
                   isEditing={isEditing}
                 />
-                <DeleteButton
-                  onHandleClick={() => handleDeleteClick(comment, reply)}
-                />
+                <DeleteButton onHandleClick={openModal} />
               </>
             )}
           </div>
