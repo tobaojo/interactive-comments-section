@@ -14,18 +14,29 @@ const DeleteModalContent = ({
   deletedReply,
 }: DeleteModalContentProps) => {
   return (
-    <div>
-      <h2>Delete Comment</h2>
-      <p>
+    <div className="p-6 flex flex-col space-y-2">
+      <h2 className="text-darkBlue font-semibold mb-3 text-xl">
+        Delete Comment
+      </h2>
+      <p className="leading-6 text-grayishBlue mx-auto">
         Are you sure you want to delete this comment? This will remove the
         comment and can't be undone
       </p>
-      <button onClick={closeModal}>NO, CANCEL</button>
-      {deletedReply && (
-        <button onClick={() => handleDeleteClick(comment, deletedReply)}>
+      <div className="flex flex-row space-x-4 items-center justify-center">
+        <button
+          onClick={closeModal}
+          className="bg-grayishBlue p-4 rounded-lg text-lightGray"
+        >
+          NO, CANCEL
+        </button>
+
+        <button
+          className="bg-softRed p-4 rounded-lg text-lightGray"
+          onClick={() => handleDeleteClick(comment, deletedReply)}
+        >
           YES, DELETE
         </button>
-      )}
+      </div>
     </div>
   );
 };

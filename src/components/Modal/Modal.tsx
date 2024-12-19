@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import Modal, { Styles } from "react-modal";
+import Modal from "react-modal";
 import "../../css/Modal.css";
 
 type ModalElementProps = {
@@ -13,33 +13,12 @@ const ModalElement = ({
   isModalOpen,
   closeModal,
 }: ModalElementProps) => {
-  const customStyles: Styles = {
-    content: {
-      margin: "auto",
-      height: "75%",
-      border: "1px solid #ccc",
-      width: "40%",
-      background: "#fff",
-      overflow: "auto",
-      borderRadius: "5px",
-      outline: "none",
-      padding: "0",
-    },
-    overlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(40, 40, 40, 0.80)",
-    },
-  };
-
   return (
     <Modal
       isOpen={isModalOpen}
       onRequestClose={closeModal}
-      style={customStyles}
+      className="self-center mx-auto h-auto w-11/12 border border-gray-300 bg-white overflow-auto rounded-lg outline-none p-0 md:w-1/4"
+      overlayClassName="flex fixed inset-0 bg-black bg-opacity-80 justify-center items-center"
     >
       {children}
     </Modal>

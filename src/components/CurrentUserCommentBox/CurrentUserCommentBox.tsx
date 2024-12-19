@@ -27,7 +27,7 @@ const CurrentUserCommentBox = ({
     addComment(newComment);
   };
   return (
-    <div className="bg-white w-full self-center p-4 m-4 md:w-8/12 h-auto sticky bottom-0">
+    <div className="bg-white w-full self-center p-4 m-4 md:w-8/12 h-auto sticky bottom-0 rounded-lg">
       <form
         className="grid grid-cols-2 grid-rows-1 md:flex md:flex-row space-x-2 gap-4"
         onSubmit={handleSubmit}

@@ -60,6 +60,7 @@ const ReplyCard = ({
   }, [reply.content]);
 
   const handleClick = () => {
+    console.log(reply);
     if (replies) {
       const hasEmptyReplies = replies.some((reply) => !reply.content);
 
@@ -74,6 +75,7 @@ const ReplyCard = ({
       content: replyText,
       createdAt: "Today",
       replies: [],
+      replyingTo: reply?.user.username,
       score: 0,
       user: currentUser,
     };
@@ -99,7 +101,6 @@ const ReplyCard = ({
     }
   };
 
-  // () => handleDeleteClick(comment, reply)
   return (
     <>
       <DeleteModal
@@ -115,7 +116,7 @@ const ReplyCard = ({
         />
       </DeleteModal>
       {!reply.content ? (
-        <div className="bg-white w-[90%] h-auto p-4 ml-4 my-4">
+        <div className="bg-white w-[90%] h-auto p-4 ml-4 my-4 rounded-xl">
           <form
             className="grid grid-cols-2 grid-rows-1 md:flex md:flex-row space-x-2 gap-4"
             onSubmit={handleSubmit}
@@ -125,6 +126,7 @@ const ReplyCard = ({
               alt={`USER - currentUser`}
               className="w-[20%] order-2 flex-1 md:order-1 md:self-center"
             />
+
             <textarea
               name="reply-box"
               id="reply-box"
@@ -133,15 +135,16 @@ const ReplyCard = ({
               onChange={(e) => setReplyText(e.target.value)}
               value={replyText}
             ></textarea>
+
             <input
               name="SEND"
               type="submit"
-              className="bg-moderateBlue text-white py-3  px-4 rounded-lg order-3 w-10/12 md:order-3 md:w-4/12 md:h-[50%]"
+              className="bg-moderateBlue text-white py-3 px-4 rounded-lg order-3 w-10/12 md:order-3 md:w-4/12 md:h-[50%]"
             />
           </form>
         </div>
       ) : (
-        <div className="bg-white w-[90%] h-auto p-4 ml-4 my-4">
+        <div className="bg-white w-[90%] h-auto p-4 ml-4 my-4 rounded-xl md:relative md:pl-16">
           <div className="flex space-x-4 items-center p-2">
             <img
               src={reply?.user?.image.png}
@@ -151,30 +154,50 @@ const ReplyCard = ({
             <h1 className="text-darkBlue font-semibold">
               {reply.user.username}
             </h1>
-            <span>{reply.createdAt}</span>
             {reply.user.username === currentUser.username && (
-              <>
-                <EditButton
-                  onHandleClick={() => handleEditReplyClick(reply)}
-                  isEditing={isEditing}
-                />
-                <DeleteButton onHandleClick={openModal} />
-              </>
+              <span className="bg-moderateBlue text-white px-1 rounded-sm">
+                you
+              </span>
             )}
+            <span>{reply.createdAt}</span>
           </div>
           {isEditing && reply.user.username === currentUser.username ? (
-            <textarea
-              name="content"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-              className="border border-lightGray w-full p-4 rounded-xl col-span-2 order-1 md:order-2"
-            ></textarea>
+            <div className="relative">
+              <textarea
+                name="content"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+                className="border border-lightGray w-full p-4 rounded-xl col-span-2 order-1 md:order-2"
+              ></textarea>
+              <button
+                onClick={() => handleEditReplyClick(reply)}
+                className="bg-moderateBlue text-white py-3 px-4 rounded-lg order-3 w-7/12 md:order-3 md:w-4/12 md:h-[50%]"
+              >
+                Update
+              </button>
+            </div>
           ) : (
             <p className="m-4">{commentContent}</p>
           )}
           <div className="flex items-center justify-between">
-            <LikeCounter score={reply.score} comment={reply} />
-            <ReplyButton onHandleClick={handleClick} />
+            <div className="md:absolute top-2 left-2">
+              <LikeCounter score={reply.score} comment={reply} />
+            </div>
+
+            {reply.user.username === currentUser.username && (
+              <div className="md:absolute md:top-4 md:right-7 flex flex-row space-x-1">
+                <DeleteButton onHandleClick={openModal} />
+                <EditButton
+                  onHandleClick={() => handleEditReplyClick(reply)}
+                  isEditing={isEditing}
+                />
+              </div>
+            )}
+            {reply.user.username !== currentUser.username && (
+              <div className="md:absolute md:top-4 md:right-7">
+                <ReplyButton onHandleClick={handleClick} />
+              </div>
+            )}
           </div>
         </div>
       )}
