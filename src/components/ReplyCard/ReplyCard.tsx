@@ -162,7 +162,7 @@ const ReplyCard = ({
             <span>{reply.createdAt}</span>
           </div>
           {isEditing && reply.user.username === currentUser.username ? (
-            <div className="relative">
+            <div className="flex flex-col space-y-3">
               <textarea
                 name="content"
                 value={commentContent}
@@ -171,7 +171,7 @@ const ReplyCard = ({
               ></textarea>
               <button
                 onClick={() => handleEditReplyClick(reply)}
-                className="bg-moderateBlue text-white py-3 px-4 rounded-lg order-3 w-7/12 md:order-3 md:w-4/12 md:h-[50%]"
+                className="bg-moderateBlue text-white py-3 px-4 rounded-lg order-3 w-7/12 md:order-3 md:w-4/12 md:h-[50%] hover:opacity-85 self-end"
               >
                 Update
               </button>

@@ -25,13 +25,13 @@ const DeleteModalContent = ({
       <div className="flex flex-row space-x-4 items-center justify-center">
         <button
           onClick={closeModal}
-          className="bg-grayishBlue p-4 rounded-lg text-lightGray"
+          className="bg-grayishBlue p-4 rounded-lg text-lightGray hover:opacity-85"
         >
           NO, CANCEL
         </button>
 
         <button
-          className="bg-softRed p-4 rounded-lg text-lightGray"
+          className="bg-softRed p-4 rounded-lg text-lightGray hover:opacity-85"
           onClick={() => handleDeleteClick(comment, deletedReply)}
         >
           YES, DELETE
