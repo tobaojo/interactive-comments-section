@@ -60,7 +60,6 @@ const ReplyCard = ({
   }, [reply.content]);
 
   const handleClick = () => {
-    console.log(reply);
     if (replies) {
       const hasEmptyReplies = replies.some((reply) => !reply.content);
 
